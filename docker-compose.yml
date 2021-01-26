@@ -1,0 +1,51 @@
+version: '3.4'
+services: 
+  mongodb:
+    image: mongo
+    container_name: "mongodb"
+    networks: 
+      - databases
+    volumes: 
+      - ./_databases/mongodb/mongo-data:/data/db
+    ports: 
+      - 27017:27017
+    command: mongod
+  back:
+    build: 
+      context: ./back
+    volumes:
+      - ./.git:/usr/src/.git
+      - ./back:/usr/src/back
+      - /usr/src/back/node_modules
+    depends_on: 
+      - mongodb
+    ports:
+      - "3001:3001"
+    environment: 
+      WAIT_HOSTS: mongodb:27017
+    networks: 
+      - back
+      - databases
+  dashboard:
+    build: 
+      context: ./dashboard
+    volumes:
+      - ./dashboard:/usr/src/dashboard
+      - /usr/src/dashboard/node_modules
+    ports:
+      - "3000:3000"
+    networks:
+      - back
+  front:
+    build: 
+      context: ./front
+    volumes:
+      - ./front:/usr/src/front
+      - /usr/src/front/node_modules
+    ports:
+      - "3002:3002"
+    networks:
+      - back
+networks: 
+  back:
+  databases:
