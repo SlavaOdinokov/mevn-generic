@@ -20,6 +20,6 @@ docker-reset:
 	@docker-compose down
 	@docker volume prune -f
 	@docker-compose build
-	@acho 'Project has been reset'
+	@echo 'Project has been reset'
 docker-stop:
 	@docker-compose down
