@@ -1,4 +1,4 @@
-if [-d "./_databases"]
+if [ -d "./_databases" ]
 then
   echo "Directory exists"
 else
